@@ -38,23 +38,15 @@
             </form>
         </div>
 
-        <!-- PILLAR 2: ROOM & DOCTOR SCHEDULING -->
+         <!-- PILLAR 2: ROOM & DOCTOR SCHEDULING -->
         <div class="card">
             <h2>2. Room & Doctor Scheduler</h2>
             <form action="ScheduleServlet" method="POST">
                 <label>Assign Doctor:</label>
-<select name="doctor" required>
-    <option value="" disabled selected hidden>-- Select Doctor --</option>
-    <option value="Dr. Santos (General Medicine)">Dr. Santos (General Medicine)</option>
-    <option value="Dr. Aglipay (Pediatrics)">Dr. Aglipay (Pediatrics)</option>
-</select>
+                <input type="text" name="doctor" required placeholder="Type doctor's name...">
 
                 <label>Assign Room / Ward:</label>
-                <select name="room" required>
-                    <option value="Room 101 - Private">Room 101 - Private</option>
-                    <option value="Ward A - Bed 3">Ward A - Bed 3</option>
-                    <option value="ICU - Bed 1">ICU - Bed 1</option>
-                </select>
+                <input type="text" name="room" required placeholder="Type room number or ward...">
 
                 <label>Appointment Date & Time:</label>
                 <input type="datetime-local" name="scheduleTime" required>
@@ -62,6 +54,7 @@
                 <button type="submit" style="background-color: #3498db;">Confirm Schedule</button>
             </form>
         </div>
+
 
         <!-- PILLAR 3: MEDICAL BILLING MANAGEMENT -->
         <div class="card">
