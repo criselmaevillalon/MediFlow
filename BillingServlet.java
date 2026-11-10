@@ -8,11 +8,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet("/BillingServelet")
-public class BillingServelet extends HttpServlet {
+@WebServlet("/BillingServlet")
+public class BillingServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    protected void doPost(HttpServeletRequest request, HttpServletResponse response) throws ServeletException, IOException {
+    protected void doPost(HttpServeletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         
