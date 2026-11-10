@@ -15,12 +15,19 @@
         button { background-color: #27ae60; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
         button:hover { background-color: #219653; }
         
+        /* Records History Section Styles */
+        .history-section { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 30px; }
+        .history-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .history-table th, .history-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
+        .history-table th { background-color: #34495e; color: white; }
+        .history-table tr:nth-child(even) { background-color: #f9f9f9; }
+        .search-box { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; border: 1px solid #3498db; border-radius: 4px; }
+        
         /* Modal Popup System Overlay Styles */
         .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
         .modal-content { background-color: white; margin: 12% auto; padding: 30px; border-radius: 8px; max-width: 400px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: left; }
         .item { display: flex; justify-content: space-between; margin: 12px 0; font-size: 15px; }
         .close-btn { width: 100%; padding: 10px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 20px; font-size: 16px; }
-        .close-btn:hover { background-color: #2980b9; }
     </style>
 </head>
 <body>
@@ -81,6 +88,26 @@
             </form>
         </div>
     </div>
+
+    <!-- DYNAMIC LIVE REPOSITORY FOR RECORD LOOKUPS -->
+    <div class="history-section">
+        <h2>🗂️ Archived Patient Records Log Database</h2>
+        <input type="text" id="recordSearch" class="search-box" onkeyup="searchRecords()" placeholder="🔍 Type a patient's name to instantly search records...">
+        
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Patient Name</th>
+                    <th>Medical Diagnostics / History Log</th>
+                </tr>
+            </thead>
+            <tbody id="historyTableBody">
+                <!-- DYNAMIC ROW INSERTIONS HAPPEN HERE -->
+            </tbody>
+        </table>
+        <button onclick="clearDatabase()" style="background-color:#c0392b; margin-top: 15px; width: auto; font-size:14px; padding: 8px 12px;">Reset Log File Database</button>
+    </div>
 </div>
 
 <!-- CENTRAL DISPLAY MODAL POPUP -->
@@ -95,12 +122,26 @@
 </div>
 
 <script>
-    // Module 1 Rendering
+    // Load existing repository rows on startup
+    window.onload = function() {
+        renderTable();
+    };
+
+    // Module 1 Rendering and Storage Logic
     function savePatient(e) {
         e.preventDefault();
         var name = document.getElementById("pName").value;
         var history = document.getElementById("pHistory").value;
+        var now = new Date().toLocaleString();
         
+        // Push record array to localStorage ledger
+        var patientsList = JSON.parse(localStorage.getItem("mediFlowPatients")) || [];
+        patientsList.push({ timestamp: now, patientName: name, medicalHistory: history });
+        localStorage.setItem("mediFlowPatients", JSON.stringify(patientsList));
+        
+        // Update live database layout display
+        renderTable();
+
         document.getElementById("modalBorder").style.borderTop = "10px solid #27ae60";
         document.getElementById("modalHeader").innerText = "✔ Patient Record Saved";
         document.getElementById("modalHeader").style.color = "#27ae60";
@@ -108,62 +149,61 @@
         document.getElementById("modalBody").innerHTML = 
             "<div class='item'><span><strong>Patient Name:</strong></span> <span>" + name + "</span></div>" +
             "<div class='item'><span><strong>Medical History:</strong></span> <span>" + history + "</span></div>" +
-            "<div class='item'><span><strong>Status:</strong></span> <span style='color:#27ae60; font-weight:bold;'>Logged Successfully</span></div>";
+            "<div class='item'><span><strong>Status:</strong></span> <span style='color:#27ae60; font-weight:bold;'>Logged into History File</span></div>";
             
         document.getElementById("modalBtn").style.backgroundColor = "#27ae60";
         document.getElementById("displayModal").style.display = "block";
+        
+        // Clear forms for next submission
+        document.getElementById("pName").value = "";
+        document.getElementById("pHistory").value = "";
     }
 
-    // Module 2 Rendering
-    function confirmSchedule(e) {
-        e.preventDefault();
-        var doc = document.getElementById("docName").value;
-        var room = document.getElementById("roomNum").value;
-        var time = document.getElementById("schedTime").value.replace("T", " ");
+    // Function to render saved values dynamically inside web tables
+    function renderTable() {
+        var patientsList = JSON.parse(localStorage.getItem("mediFlowPatients")) || [];
+        var tbody = document.getElementById("historyTableBody");
+        tbody.innerHTML = "";
         
-        document.getElementById("modalBorder").style.borderTop = "10px solid #3498db";
-        document.getElementById("modalHeader").innerText = "📅 Appointment Scheduled";
-        document.getElementById("modalHeader").style.color = "#3498db";
-        
-        document.getElementById("modalBody").innerHTML = 
-            "<div class='item'><span><strong>Assigned Doctor:</strong></span> <span>" + doc + "</span></div>" +
-            "<div class='item'><span><strong>Location:</strong></span> <span>" + room + "</span></div>" +
-            "<div class='item'><span><strong>Date/Time:</strong></span> <span>" + time + "</span></div>";
-            
-        document.getElementById("modalBtn").style.backgroundColor = "#3498db";
-        document.getElementById("displayModal").style.display = "block";
+        if(patientsList.length === 0) {
+            tbody.innerHTML = "<tr><td colspan='3' style='text-align:center; color:#7f8c8d;'>No records found in database. Input data above to generate registry logs.</td></tr>";
+            return;
+        }
+
+        for (var i = patientsList.length - 1; i >= 0; i--) {
+            var row = "<tr>" +
+                "<td>" + patientsList[i].timestamp + "</td>" +
+                "<td><strong>" + patientsList[i].patientName + "</strong></td>" +
+                "<td>" + patientsList[i].medicalHistory + "</td>" +
+                "</tr>";
+            tbody.innerHTML += row;
+        }
     }
 
-    // Module 3 Core Formula-Driven Billing Calculation
-    function calculateBilling(e) {
-        e.preventDefault();
-        var consult = parseFloat(document.getElementById("feeConsult").value) || 0;
-        var lab = parseFloat(document.getElementById("feeLab").value) || 0;
-        var med = parseFloat(document.getElementById("feeMed").value) || 0;
-        var room = parseFloat(document.getElementById("feeRoom").value) || 0;
-        
-        var total = consult + lab + med + room;
-        
-        document.getElementById("modalBorder").style.borderTop = "10px solid #e67e22";
-        document.getElementById("modalHeader").innerText = "🧾 MediFlow Invoice Issued";
-        document.getElementById("modalHeader").style.color = "#e67e22";
-        
-        document.getElementById("modalBody").innerHTML = 
-            "<div class='item'><span>Consultation Fee:</span> <strong>₱" + consult.toFixed(2) + "</strong></div>" +
-            "<div class='item'><span>Laboratory Fee:</span> <strong>₱" + lab.toFixed(2) + "</strong></div>" +
-            "<div class='item'><span>Medicine Costs:</span> <strong>₱" + med.toFixed(2) + "</strong></div>" +
-            "<div class='item'><span>Room Charges:</span> <strong>₱" + room.toFixed(2) + "</strong></div>" +
-            "<hr>" +
-            "<div class='item' style='font-size:18px;'><span><strong>Grand Total:</strong></span> <span style='color: #e67e22;'><strong>₱" + total.toFixed(2) + "</strong></span></div>";
-            
-        document.getElementById("modalBtn").style.backgroundColor = "#e67e22";
-        document.getElementById("displayModal").style.display = "block";
+    // Real-time lookup indexing engine
+    function searchRecords() {
+        var input = document.getElementById("recordSearch").value.toUpperCase();
+        var table = document.querySelector(".history-table");
+        var tr = table.getElementsByTagName("tr");
+
+        for (var i = 1; i < tr.length; i++) {
+            var td = tr[i].getElementsByTagName("td")[1]; // Target column 2 (Patient Name)
+            if (td) {
+                var txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(input) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
     }
 
-    function closeModal() {
-        document.getElementById("displayModal").style.display = "none";
+    function clearDatabase() {
+        if(confirm("Are you sure you want to erase all logged history records in this terminal registry file?")) {
+            localStorage.removeItem("mediFlowPatients");
+            renderTable();
+        }
     }
-</script>
 
-</body>
-</html>
+ 
