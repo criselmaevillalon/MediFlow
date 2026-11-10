@@ -1,0 +1,90 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>MediFlow HMS - MVP Dashboard</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f6f9; }
+        .container { max-width: 1200px; margin: auto; }
+        h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
+        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px; }
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .card h2 { color: #2980b9; margin-top: 0; }
+        label { display: block; margin: 10px 0 5px; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { background-color: #27ae60; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
+        button:hover { background-color: #219653; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>MediFlow Hospital Management System (MVP)</h1>
+    <p>Logged in: Authorized Personnel (Flora, Apayao Facility)</p>
+
+    <div class="grid">
+        <!-- PILLAR 1: PATIENT RECORD MANAGEMENT -->
+        <div class="card">
+            <h2>1. Patient Records</h2>
+            <form action="PatientServlet" method="POST">
+                <label>Patient Name:</label>
+                <input type="text" name="patientName" required placeholder="e.g., Juan Dela Cruz">
+                
+                <label>Medical History / Diagnostics:</label>
+                <textarea name="medicalHistory" rows="4" required placeholder="Enter symptoms, allergies, or diagnosis..."></textarea>
+                
+                <button type="submit">Save Patient Record</button>
+            </form>
+        </div>
+
+        <!-- PILLAR 2: ROOM & DOCTOR SCHEDULING -->
+        <div class="card">
+            <h2>2. Room & Doctor Scheduler</h2>
+            <form action="ScheduleServlet" method="POST">
+                <label>Assign Doctor:</label>
+                <select name="doctor" required>
+                    <option value="Dr. Santos (General Medicine)">Dr. Santos (General Medicine)</option>
+                    <option value="Dr. Aglipay (Pediatrics)">Dr. Aglipay (Pediatrics)</option>
+                </select>
+
+                <label>Assign Room / Ward:</label>
+                <select name="room" required>
+                    <option value="Room 101 - Private">Room 101 - Private</option>
+                    <option value="Ward A - Bed 3">Ward A - Bed 3</option>
+                    <option value="ICU - Bed 1">ICU - Bed 1</option>
+                </select>
+
+                <label>Appointment Date & Time:</label>
+                <input type="datetime-local" name="scheduleTime" required>
+
+                <button type="submit" style="background-color: #3498db;">Confirm Schedule</button>
+            </form>
+        </div>
+
+        <!-- PILLAR 3: MEDICAL BILLING MANAGEMENT -->
+        <div class="card">
+            <h2>3. Automated Billing</h2>
+            <form action="BillingServlet" method="POST">
+                <label>Consultation Fee (₱):</label>
+                <input type="number" name="consultationFee" value="0" min="0" required>
+
+                <label>Laboratory Fees (₱):</label>
+                <input type="number" name="labFee" value="0" min="0" required>
+
+                <label>Medicine Costs (₱):</label>
+                <input type="number" name="medicineCost" value="0" min="0" required>
+
+                <label>Room Charges (₱):</label>
+                <input type="number" name="roomCharge" value="0" min="0" required>
+
+                <button type="submit" style="background-color: #e67e22;">Calculate & Issue Invoice</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+Compose
+
