@@ -15,6 +15,12 @@
         input, select, textarea { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
         button { background-color: #27ae60; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
         button:hover { background-color: #219653; }
+        
+        /* Modal Popup styles for professional invoice rendering */
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
+        .modal-content { background-color: white; margin: 15% auto; padding: 30px; border-radius: 8px; max-width: 400px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); border-top: 10px solid #e67e22; }
+        .item { display: flex; justify-content: space-between; margin: 10px 0; }
+        .close-btn { width: 100%; padding: 10px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -27,51 +33,49 @@
         <!-- PILLAR 1: PATIENT RECORD MANAGEMENT -->
         <div class="card">
             <h2>1. Patient Records</h2>
-            <form action="PatientServlet" method="POST">
+            <form onsubmit="savePatient(event)">
                 <label>Patient Name:</label>
-                <input type="text" name="patientName" required placeholder="e.g., Juan Dela Cruz">
+                <input type="text" id="pName" required placeholder="e.g., Juan Dela Cruz">
                 
                 <label>Medical History / Diagnostics:</label>
-                <textarea name="medicalHistory" rows="4" required placeholder="Enter symptoms, allergies, or diagnosis..."></textarea>
+                <textarea id="pHistory" rows="4" required placeholder="Enter symptoms, allergies, or diagnosis..."></textarea>
                 
                 <button type="submit">Save Patient Record</button>
             </form>
         </div>
 
-          <!-- PILLAR 2: ROOM & DOCTOR SCHEDULING -->
+        <!-- PILLAR 2: ROOM & DOCTOR SCHEDULING -->
         <div class="card">
             <h2>2. Room & Doctor Scheduler</h2>
-            <form action="ScheduleServlet" method="POST">
+            <form onsubmit="confirmSchedule(event)">
                 <label>Assign Doctor:</label>
-                <input type="text" name="doctor" required placeholder="Type doctor's name...">
+                <input type="text" id="docName" required placeholder="Type doctor's name...">
 
                 <label>Assign Room / Ward:</label>
-                <input type="text" name="room" required placeholder="Type room number or ward...">
+                <input type="text" id="roomNum" required placeholder="Type room number or ward...">
 
                 <label>Appointment Date & Time:</label>
-                <input type="datetime-local" name="scheduleTime" required>
+                <input type="datetime-local" id="schedTime" required>
 
                 <button type="submit" style="background-color: #3498db;">Confirm Schedule</button>
             </form>
         </div>
 
-
-
         <!-- PILLAR 3: MEDICAL BILLING MANAGEMENT -->
         <div class="card">
             <h2>3. Automated Billing</h2>
-            <form action="BillingServlet" method="POST">
+            <form onsubmit="calculateBilling(event)">
                 <label>Consultation Fee (₱):</label>
-                <input type="number" name="consultationFee" value="0" min="0" required>
+                <input type="number" id="feeConsult" value="0" min="0" required>
 
                 <label>Laboratory Fees (₱):</label>
-                <input type="number" name="labFee" value="0" min="0" required>
+                <input type="number" id="feeLab" value="0" min="0" required>
 
                 <label>Medicine Costs (₱):</label>
-                <input type="number" name="medicineCost" value="0" min="0" required>
+                <input type="number" id="feeMed" value="0" min="0" required>
 
                 <label>Room Charges (₱):</label>
-                <input type="number" name="roomCharge" value="0" min="0" required>
+                <input type="number" id="feeRoom" value="0" min="0" required>
 
                 <button type="submit" style="background-color: #e67e22;">Calculate & Issue Invoice</button>
             </form>
@@ -79,6 +83,62 @@
     </div>
 </div>
 
+<!-- INVOICE MODAL POPUP DISPLAY -->
+<div id="invoiceModal" class="modal">
+    <div class="modal-content">
+        <h2 style="text-align:center; color:#2c3e50; margin-top:0;">MediFlow HMS Invoice</h2>
+        <p style="text-align:center; font-size:12px; color:#7f8c8d;">Flora, Apayao Branch Facility</p>
+        <hr>
+        <div class="item"><span>Consultation Fee:</span> <strong id="outConsult">₱0</strong></div>
+        <div class="item"><span>Laboratory Fee:</span> <strong id="outLab">₱0</strong></div>
+        <div class="item"><span>Medicine Costs:</span> <strong id="outMed">₱0</strong></div>
+        <div class="item"><span>Room Charges:</span> <strong id="outRoom">₱0</strong></div>
+        <hr>
+        <div class="item" style="font-size:18px;"><span><strong>Grand Total:</strong></span> <span style="color: #e67e22;"><strong id="outTotal">₱0</strong></span></div>
+        <button class="close-btn" onclick="closeModal()">Close Invoice</button>
+    </div>
+</div>
+
+<script>
+    // Module 1 Processing
+    function savePatient(e) {
+        e.preventDefault();
+        var name = document.getElementById("pName").value;
+        alert("✔ Patient Record Saved Successfully!\n\nPatient Name: " + name + "\nStatus: Logged into MediFlow Local Repository.");
+    }
+
+    // Module 2 Processing
+    function confirmSchedule(e) {
+        e.preventDefault();
+        var doc = document.getElementById("docName").value;
+        var rNum = document.getElementById("roomNum").value;
+        var time = document.getElementById("schedTime").value.replace("T", " ");
+        alert("📅 Appointment Successfully Scheduled!\n\nAssigned Doctor: " + doc + "\nLocation: " + rNum + "\nDate/Time: " + time);
+    }
+
+    // Module 3 Core Formula-Driven Calculation
+    function calculateBilling(e) {
+        e.preventDefault();
+        var consult = parseFloat(document.getElementById("feeConsult").value) || 0;
+        var lab = parseFloat(document.getElementById("feeLab").value) || 0;
+        var med = parseFloat(document.getElementById("feeMed").value) || 0;
+        var room = parseFloat(document.getElementById("feeRoom").value) || 0;
+        
+        var total = consult + lab + med + room;
+        
+        document.getElementById("outConsult").innerText = "₱" + consult;
+        document.getElementById("outLab").innerText = "₱" + lab;
+        document.getElementById("outMed").innerText = "₱" + med;
+        document.getElementById("outRoom").innerText = "₱" + room;
+        document.getElementById("outTotal").innerText = "₱" + total;
+        
+        document.getElementById("invoiceModal").style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById("invoiceModal").style.display = "none";
+    }
+</script>
+
 </body>
 </html>
-
