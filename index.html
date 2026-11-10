@@ -1,6 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>MediFlow HMS - MVP Dashboard</title>
@@ -16,11 +15,12 @@
         button { background-color: #27ae60; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
         button:hover { background-color: #219653; }
         
-        /* Modal Popup styles for professional invoice rendering */
+        /* Modal Popup System Overlay Styles */
         .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
-        .modal-content { background-color: white; margin: 15% auto; padding: 30px; border-radius: 8px; max-width: 400px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); border-top: 10px solid #e67e22; }
-        .item { display: flex; justify-content: space-between; margin: 10px 0; }
-        .close-btn { width: 100%; padding: 10px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 20px; }
+        .modal-content { background-color: white; margin: 12% auto; padding: 30px; border-radius: 8px; max-width: 400px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: left; }
+        .item { display: flex; justify-content: space-between; margin: 12px 0; font-size: 15px; }
+        .close-btn { width: 100%; padding: 10px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 20px; font-size: 16px; }
+        .close-btn:hover { background-color: #2980b9; }
     </style>
 </head>
 <body>
@@ -83,40 +83,58 @@
     </div>
 </div>
 
-<!-- INVOICE MODAL POPUP DISPLAY -->
-<div id="invoiceModal" class="modal">
-    <div class="modal-content">
-        <h2 style="text-align:center; color:#2c3e50; margin-top:0;">MediFlow HMS Invoice</h2>
-        <p style="text-align:center; font-size:12px; color:#7f8c8d;">Flora, Apayao Branch Facility</p>
+<!-- CENTRAL DISPLAY MODAL POPUP -->
+<div id="displayModal" class="modal">
+    <div class="modal-content" id="modalBorder">
+        <h2 style="text-align:center; margin-top:0;" id="modalHeader">System Notification</h2>
+        <p style="text-align:center; font-size:12px; color:#7f8c8d; margin-top:-10px;">MediFlow Facility Cloud Service</p>
         <hr>
-        <div class="item"><span>Consultation Fee:</span> <strong id="outConsult">₱0</strong></div>
-        <div class="item"><span>Laboratory Fee:</span> <strong id="outLab">₱0</strong></div>
-        <div class="item"><span>Medicine Costs:</span> <strong id="outMed">₱0</strong></div>
-        <div class="item"><span>Room Charges:</span> <strong id="outRoom">₱0</strong></div>
-        <hr>
-        <div class="item" style="font-size:18px;"><span><strong>Grand Total:</strong></span> <span style="color: #e67e22;"><strong id="outTotal">₱0</strong></span></div>
-        <button class="close-btn" onclick="closeModal()">Close Invoice</button>
+        <div id="modalBody"></div>
+        <button class="close-btn" id="modalBtn" onclick="closeModal()">OK</button>
     </div>
 </div>
 
 <script>
-    // Module 1 Processing
+    // Module 1 Rendering
     function savePatient(e) {
         e.preventDefault();
         var name = document.getElementById("pName").value;
-        alert("✔ Patient Record Saved Successfully!\n\nPatient Name: " + name + "\nStatus: Logged into MediFlow Local Repository.");
+        var history = document.getElementById("pHistory").value;
+        
+        document.getElementById("modalBorder").style.borderTop = "10px solid #27ae60";
+        document.getElementById("modalHeader").innerText = "✔ Patient Record Saved";
+        document.getElementById("modalHeader").style.color = "#27ae60";
+        
+        document.getElementById("modalBody").innerHTML = 
+            "<div class='item'><span><strong>Patient Name:</strong></span> <span>" + name + "</span></div>" +
+            "<div class='item'><span><strong>Medical History:</strong></span> <span>" + history + "</span></div>" +
+            "<div class='item'><span><strong>Status:</strong></span> <span style='color:#27ae60; font-weight:bold;'>Logged Successfully</span></div>";
+            
+        document.getElementById("modalBtn").style.backgroundColor = "#27ae60";
+        document.getElementById("displayModal").style.display = "block";
     }
 
-    // Module 2 Processing
+    // Module 2 Rendering
     function confirmSchedule(e) {
         e.preventDefault();
         var doc = document.getElementById("docName").value;
-        var rNum = document.getElementById("roomNum").value;
+        var room = document.getElementById("roomNum").value;
         var time = document.getElementById("schedTime").value.replace("T", " ");
-        alert("📅 Appointment Successfully Scheduled!\n\nAssigned Doctor: " + doc + "\nLocation: " + rNum + "\nDate/Time: " + time);
+        
+        document.getElementById("modalBorder").style.borderTop = "10px solid #3498db";
+        document.getElementById("modalHeader").innerText = "📅 Appointment Scheduled";
+        document.getElementById("modalHeader").style.color = "#3498db";
+        
+        document.getElementById("modalBody").innerHTML = 
+            "<div class='item'><span><strong>Assigned Doctor:</strong></span> <span>" + doc + "</span></div>" +
+            "<div class='item'><span><strong>Location:</strong></span> <span>" + room + "</span></div>" +
+            "<div class='item'><span><strong>Date/Time:</strong></span> <span>" + time + "</span></div>";
+            
+        document.getElementById("modalBtn").style.backgroundColor = "#3498db";
+        document.getElementById("displayModal").style.display = "block";
     }
 
-    // Module 3 Core Formula-Driven Calculation
+    // Module 3 Core Formula-Driven Billing Calculation
     function calculateBilling(e) {
         e.preventDefault();
         var consult = parseFloat(document.getElementById("feeConsult").value) || 0;
@@ -126,17 +144,24 @@
         
         var total = consult + lab + med + room;
         
-        document.getElementById("outConsult").innerText = "₱" + consult;
-        document.getElementById("outLab").innerText = "₱" + lab;
-        document.getElementById("outMed").innerText = "₱" + med;
-        document.getElementById("outRoom").innerText = "₱" + room;
-        document.getElementById("outTotal").innerText = "₱" + total;
+        document.getElementById("modalBorder").style.borderTop = "10px solid #e67e22";
+        document.getElementById("modalHeader").innerText = "🧾 MediFlow Invoice Issued";
+        document.getElementById("modalHeader").style.color = "#e67e22";
         
-        document.getElementById("invoiceModal").style.display = "block";
+        document.getElementById("modalBody").innerHTML = 
+            "<div class='item'><span>Consultation Fee:</span> <strong>₱" + consult.toFixed(2) + "</strong></div>" +
+            "<div class='item'><span>Laboratory Fee:</span> <strong>₱" + lab.toFixed(2) + "</strong></div>" +
+            "<div class='item'><span>Medicine Costs:</span> <strong>₱" + med.toFixed(2) + "</strong></div>" +
+            "<div class='item'><span>Room Charges:</span> <strong>₱" + room.toFixed(2) + "</strong></div>" +
+            "<hr>" +
+            "<div class='item' style='font-size:18px;'><span><strong>Grand Total:</strong></span> <span style='color: #e67e22;'><strong>₱" + total.toFixed(2) + "</strong></span></div>";
+            
+        document.getElementById("modalBtn").style.backgroundColor = "#e67e22";
+        document.getElementById("displayModal").style.display = "block";
     }
 
     function closeModal() {
-        document.getElementById("invoiceModal").style.display = "none";
+        document.getElementById("displayModal").style.display = "none";
     }
 </script>
 
