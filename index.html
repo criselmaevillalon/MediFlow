@@ -27,7 +27,7 @@
         <!-- PILLAR 1: PATIENT RECORD MANAGEMENT -->
         <div class="card">
             <h2>1. Patient Records</h2>
-            <form action="PatientServlet" method="POST">
+            <form action="PatientServelet" method="POST">
                 <label>Patient Name:</label>
                 <input type="text" name="patientName" required placeholder="e.g., Juan Dela Cruz">
                 
@@ -41,7 +41,7 @@
         <!-- PILLAR 2: ROOM & DOCTOR SCHEDULING -->
         <div class="card">
             <h2>2. Room & Doctor Scheduler</h2>
-            <form action="ScheduleServlet" method="POST">
+            <form action="ScheduleServelet" method="POST">
                 <label>Assign Doctor:</label>
                 <select name="doctor" required>
                     <option value="Dr. Santos (General Medicine)">Dr. Santos (General Medicine)</option>
@@ -65,7 +65,7 @@
         <!-- PILLAR 3: MEDICAL BILLING MANAGEMENT -->
         <div class="card">
             <h2>3. Automated Billing</h2>
-            <form action="BillingServlet" method="POST">
+            <form action="BillingServelet" method="POST">
                 <label>Consultation Fee (₱):</label>
                 <input type="number" name="consultationFee" value="0" min="0" required>
 
