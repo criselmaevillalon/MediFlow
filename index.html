@@ -43,10 +43,11 @@
             <h2>2. Room & Doctor Scheduler</h2>
             <form action="ScheduleServlet" method="POST">
                 <label>Assign Doctor:</label>
-                <select name="doctor" required>
-                    <option value="Dr. Santos (General Medicine)">Dr. Santos (General Medicine)</option>
-                    <option value="Dr. Aglipay (Pediatrics)">Dr. Aglipay (Pediatrics)</option>
-                </select>
+<select name="doctor" required>
+    <option value="" disabled selected hidden>-- Select Doctor --</option>
+    <option value="Dr. Santos (General Medicine)">Dr. Santos (General Medicine)</option>
+    <option value="Dr. Aglipay (Pediatrics)">Dr. Aglipay (Pediatrics)</option>
+</select>
 
                 <label>Assign Room / Ward:</label>
                 <select name="room" required>
