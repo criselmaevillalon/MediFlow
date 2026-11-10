@@ -2,208 +2,183 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>MediFlow HMS - MVP Dashboard</title>
+    <title>MediFlow HMS - CSS Flow Layout Framework</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f6f9; }
-        .container { max-width: 1200px; margin: auto; }
-        h1 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
-        .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px; }
-        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .card h2 { color: #2980b9; margin-top: 0; }
-        label { display: block; margin: 10px 0 5px; font-weight: bold; }
-        input, select, textarea { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { background-color: #27ae60; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
+        /* Base page layout container configurations */
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f6f9; color: #2c3e50; }
+        .app-container { max-width: 1350px; margin: auto; }
+        
+        /* HEADER ZONE */
+        .app-header { background-color: #2c3e50; color: white; padding: 15px 20px; border-radius: 6px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .app-header h1 { margin: 0; font-size: 22px; }
+        .app-header .user-badge { background-color: #34495e; padding: 6px 12px; border-radius: 4px; font-size: 13px; font-weight: bold; border-left: 4px solid #3498db; }
+
+        /* THE SYSTEM FLOW SECTION ENGINE 
+           This handles the classic Flow Layout arrangement, letting cards line up and wrap naturally */
+        .flow-layout-container { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 20px; 
+            justify-content: flex-start;
+            margin-bottom: 25px;
+        }
+
+        /* FLEX FLOW COMPONENT CARD WRAPPERS 
+           Cards scale fluidly down to a minimum base size and naturally wrap based on screen boundaries */
+        .flow-card { 
+            background: #ffffff; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08); 
+            border-top: 5px solid #3498db;
+            flex: 1 1 380px; /* Flex-grow, Flex-shrink, and base ideal width */
+            box-sizing: border-box;
+        }
+        .flow-card.patient-card { border-top-color: #27ae60; }
+        .flow-card.billing-card { border-top-color: #e67e22; }
+        .flow-card h2 { font-size: 17px; margin-top: 0; margin-bottom: 15px; color: #2c3e50; }
+        
+        /* Form Element Component Designs */
+        label { display: block; margin: 10px 0 4px; font-weight: bold; font-size: 13px; color: #34495e; }
+        input, select, textarea { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 13px; }
+        button { background-color: #27ae60; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 15px; font-weight: bold; transition: background 0.2s; }
         button:hover { background-color: #219653; }
+
+        /* LARGE SYSTEM REGISTRY PANEL (Flows below input structures gracefully) */
+        .database-flow-panel { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .database-flow-panel h2 { margin-top: 0; color: #2c3e50; border-bottom: 2px solid #f1f2f6; padding-bottom: 10px; font-size: 18px; }
         
-        /* Records History Section Styles */
-        .history-section { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: 30px; }
-        .history-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        .history-table th, .history-table td { border: 1px solid #ddd; padding: 12px; text-align: left; }
-        .history-table th { background-color: #34495e; color: white; }
-        .history-table tr:nth-child(even) { background-color: #f9f9f9; }
-        .search-box { width: 100%; padding: 10px; font-size: 16px; margin-bottom: 15px; border: 1px solid #3498db; border-radius: 4px; }
+        /* Interactive Filter Layout Bars */
+        .search-row { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; align-items: center; }
+        .search-box { flex: 1; min-width: 280px; padding: 10px; font-size: 14px; border: 2px solid #3498db; border-radius: 4px; outline: none; }
+        .stat-badge { background-color: #ecf0f1; padding: 10px 15px; border-radius: 4px; font-weight: bold; color: #2c3e50; font-size: 14px; white-space: nowrap; }
+
+        /* Data Matrix Output Structures */
+        .history-table { width: 100%; border-collapse: collapse; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .history-table th, .history-table td { border: 1px solid #e1e4e8; padding: 12px; font-size: 13px; text-align: left; }
+        .history-table th { background-color: #f1f2f6; color: #2c3e50; font-weight: bold; }
+        .history-table tr:nth-child(even) { background-color: #f8f9fa; }
+        .history-table tr:hover { background-color: #f1f2f6; }
+
+        /* FOOTER STATUS LAYER */
+        .app-footer { background-color: #34495e; color: #bdc3c7; padding: 10px 20px; font-size: 12px; border-radius: 6px; margin-top: 25px; display: flex; justify-content: space-between; box-shadow: 0 -2px 4px rgba(0,0,0,0.05); }
         
-        /* Modal Popup System Overlay Styles */
+        /* Modal Window Notification System Overlays */
         .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
-        .modal-content { background-color: white; margin: 12% auto; padding: 30px; border-radius: 8px; max-width: 400px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: left; }
-        .item { display: flex; justify-content: space-between; margin: 12px 0; font-size: 15px; }
-        .close-btn { width: 100%; padding: 10px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 20px; font-size: 16px; }
+        .modal-content { background-color: white; margin: 12% auto; padding: 25px; border-radius: 8px; max-width: 380px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: left; }
+        .modal-item { display: flex; justify-content: space-between; margin: 10px 0; font-size: 14px; }
+        .modal-close-btn { width: 100%; padding: 8px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 15px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h1>MediFlow Hospital Management System (MVP)</h1>
-    <p>Logged in: Authorized Personnel (Flora, Apayao Facility)</p>
-
-    <div class="grid">
-        <!-- PILLAR 1: PATIENT RECORD MANAGEMENT -->
-        <div class="card">
-            <h2>1. Patient Records</h2>
-            <form onsubmit="savePatient(event)">
-                <label>Patient Name:</label>
-                <input type="text" id="pName" required placeholder="e.g., Juan Dela Cruz">
-                
-                <label>Medical History / Diagnostics:</label>
-                <textarea id="pHistory" rows="4" required placeholder="Enter symptoms, allergies, or diagnosis..."></textarea>
-                
-                <button type="submit">Save Patient Record</button>
-            </form>
+    <div class="app-container">
+        
+        <!-- SYSTEM NAVIGATION HEADER OVERVIEW -->
+        <div class="app-header">
+            <h1>MediFlow Hospital Management System (HMS)</h1>
+            <div class="user-badge">🔒 Flora, Apayao Branch Terminal</div>
         </div>
 
-        <!-- PILLAR 2: ROOM & DOCTOR SCHEDULING -->
-        <div class="card">
-            <h2>2. Room & Doctor Scheduler</h2>
-            <form onsubmit="confirmSchedule(event)">
-                <label>Assign Doctor:</label>
-                <input type="text" id="docName" required placeholder="Type doctor's name...">
-
-                <label>Assign Room / Ward:</label>
-                <input type="text" id="roomNum" required placeholder="Type room number or ward...">
-
-                <label>Appointment Date & Time:</label>
-                <input type="datetime-local" id="schedTime" required>
-
-                <button type="submit" style="background-color: #3498db;">Confirm Schedule</button>
-            </form>
-        </div>
-
-        <!-- PILLAR 3: MEDICAL BILLING MANAGEMENT -->
-        <div class="card">
-            <h2>3. Automated Billing</h2>
-            <form onsubmit="calculateBilling(event)">
-                <label>Consultation Fee (₱):</label>
-                <input type="number" id="feeConsult" value="0" min="0" required>
-
-                <label>Laboratory Fees (₱):</label>
-                <input type="number" id="feeLab" value="0" min="0" required>
-
-                <label>Medicine Costs (₱):</label>
-                <input type="number" id="feeMed" value="0" min="0" required>
-
-                <label>Room Charges (₱):</label>
-                <input type="number" id="feeRoom" value="0" min="0" required>
-
-                <button type="submit" style="background-color: #e67e22;">Calculate & Issue Invoice</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- DYNAMIC LIVE REPOSITORY FOR RECORD LOOKUPS -->
-    <div class="history-section">
-        <h2>🗂️ Archived Patient Records Log Database</h2>
-        <input type="text" id="recordSearch" class="search-box" onkeyup="searchRecords()" placeholder="🔍 Type a patient's name to instantly search records...">
-        
-        <table class="history-table">
-            <thead>
-                <tr>
-                    <th>Timestamp</th>
-                    <th>Patient Name</th>
-                    <th>Medical Diagnostics / History Log</th>
-                </tr>
-            </thead>
-            <tbody id="historyTableBody">
-                <!-- DYNAMIC ROW INSERTIONS HAPPEN HERE -->
-            </tbody>
-        </table>
-        <button onclick="clearDatabase()" style="background-color:#c0392b; margin-top: 15px; width: auto; font-size:14px; padding: 8px 12px;">Reset Log File Database</button>
-    </div>
-</div>
-
-<!-- CENTRAL DISPLAY MODAL POPUP -->
-<div id="displayModal" class="modal">
-    <div class="modal-content" id="modalBorder">
-        <h2 style="text-align:center; margin-top:0;" id="modalHeader">System Notification</h2>
-        <p style="text-align:center; font-size:12px; color:#7f8c8d; margin-top:-10px;">MediFlow Facility Cloud Service</p>
-        <hr>
-        <div id="modalBody"></div>
-        <button class="close-btn" id="modalBtn" onclick="closeModal()">OK</button>
-    </div>
-</div>
-
-<script>
-    // Load existing repository rows on startup
-    window.onload = function() {
-        renderTable();
-    };
-
-    // Module 1 Rendering and Storage Logic
-    function savePatient(e) {
-        e.preventDefault();
-        var name = document.getElementById("pName").value;
-        var history = document.getElementById("pHistory").value;
-        var now = new Date().toLocaleString();
-        
-        // Push record array to localStorage ledger
-        var patientsList = JSON.parse(localStorage.getItem("mediFlowPatients")) || [];
-        patientsList.push({ timestamp: now, patientName: name, medicalHistory: history });
-        localStorage.setItem("mediFlowPatients", JSON.stringify(patientsList));
-        
-        // Update live database layout display
-        renderTable();
-
-        document.getElementById("modalBorder").style.borderTop = "10px solid #27ae60";
-        document.getElementById("modalHeader").innerText = "✔ Patient Record Saved";
-        document.getElementById("modalHeader").style.color = "#27ae60";
-        
-        document.getElementById("modalBody").innerHTML = 
-            "<div class='item'><span><strong>Patient Name:</strong></span> <span>" + name + "</span></div>" +
-            "<div class='item'><span><strong>Medical History:</strong></span> <span>" + history + "</span></div>" +
-            "<div class='item'><span><strong>Status:</strong></span> <span style='color:#27ae60; font-weight:bold;'>Logged into History File</span></div>";
+        <!-- [PRIMARY FLOW LAYOUT WORKSPACE ENVELOPE] -->
+        <div class="flow-layout-container">
             
-        document.getElementById("modalBtn").style.backgroundColor = "#27ae60";
-        document.getElementById("displayModal").style.display = "block";
-        
-        // Clear forms for next submission
-        document.getElementById("pName").value = "";
-        document.getElementById("pHistory").value = "";
-    }
+            <!-- FLOW ITEM CARD 1: ADMISSIONS PROFILE -->
+            <div class="flow-card patient-card">
+                <h2>1. Patient Admissions Record</h2>
+                <form onsubmit="savePatient(event)">
+                    <label>Patient Full Name:</label>
+                    <input type="text" id="pName" required placeholder="e.g., Juan Dela Cruz">
+                    
+                    <label>Medical History / Diagnostics / Allergies:</label>
+                    <textarea id="pHistory" rows="4" required placeholder="Enter medical history logs..."></textarea>
+                    
+                    <button type="submit">Save File Entry</button>
+                </form>
+            </div>
 
-    // Function to render saved values dynamically inside web tables
-    function renderTable() {
-        var patientsList = JSON.parse(localStorage.getItem("mediFlowPatients")) || [];
-        var tbody = document.getElementById("historyTableBody");
-        tbody.innerHTML = "";
-        
-        if(patientsList.length === 0) {
-            tbody.innerHTML = "<tr><td colspan='3' style='text-align:center; color:#7f8c8d;'>No records found in database. Input data above to generate registry logs.</td></tr>";
-            return;
-        }
+            <!-- FLOW ITEM CARD 2: SCHEDULING DISPATCH -->
+            <div class="flow-card">
+                <h2>2. Room & Doctor Appointment Scheduler</h2>
+                <form onsubmit="confirmSchedule(event)">
+                    <label>Assign Attending Practitioner:</label>
+                    <input type="text" id="docName" required placeholder="Type doctor name...">
 
-        for (var i = patientsList.length - 1; i >= 0; i--) {
-            var row = "<tr>" +
-                "<td>" + patientsList[i].timestamp + "</td>" +
-                "<td><strong>" + patientsList[i].patientName + "</strong></td>" +
-                "<td>" + patientsList[i].medicalHistory + "</td>" +
-                "</tr>";
-            tbody.innerHTML += row;
-        }
-    }
+                    <label>Designated Hospital Ward / Room:</label>
+                    <input type="text" id="roomNum" required placeholder="Type bed, ward, or room code...">
 
-    // Real-time lookup indexing engine
-    function searchRecords() {
-        var input = document.getElementById("recordSearch").value.toUpperCase();
-        var table = document.querySelector(".history-table");
-        var tr = table.getElementsByTagName("tr");
+                    <label>Allocation Date & Time:</label>
+                    <input type="datetime-local" id="schedTime" required>
 
-        for (var i = 1; i < tr.length; i++) {
-            var td = tr[i].getElementsByTagName("td")[1]; // Target column 2 (Patient Name)
-            if (td) {
-                var txtValue = td.textContent || td.innerText;
-                if (txtValue.toUpperCase().indexOf(input) > -1) {
-                    tr[i].style.display = "";
-                } else {
-                    tr[i].style.display = "none";
-                }
-            }
-        }
-    }
+                    <button type="submit" style="background-color: #3498db;">Lock Allocation Schedule</button>
+                </form>
+            </div>
 
-    function clearDatabase() {
-        if(confirm("Are you sure you want to erase all logged history records in this terminal registry file?")) {
-            localStorage.removeItem("mediFlowPatients");
-            renderTable();
-        }
-    }
+            <!-- FLOW ITEM CARD 3: ACCOUNTING CALCULATOR -->
+            <div class="flow-card billing-card">
+                <h2>3. Automated Financial Billing Module</h2>
+                <form onsubmit="calculateBilling(event)">
+                    <label>Consultation Fee (₱):</label>
+                    <input type="number" id="feeConsult" value="0" min="0" required>
 
- 
+                    <label>Laboratory Screening Fees (₱):</label>
+                    <input type="number" id="feeLab" value="0" min="0" required>
+
+                    <label>Pharmacy Medicine Costs (₱):</label>
+                    <input type="number" id="feeMed" value="0" min="0" required>
+
+                    <label>Accommodation Room Charges (₱):</label>
+                    <input type="number" id="feeRoom" value="0" min="0" required>
+
+                    <button type="submit" style="background-color: #e67e22;">Calculate Grand Total Invoice</button>
+                </form>
+            </div>
+
+        </div>
+
+        <!-- STRETCHED LOGGING LEDGER REGISTRY CONTAINER -->
+        <div class="database-flow-panel">
+            <h2>🗂️ Archived Patient Records Log Database Registry</h2>
+            <div class="search-row">
+                <input type="text" id="recordSearch" class="search-box" onkeyup="searchRecords()" placeholder="🔍 Type a patient's name to filter database logs in real-time...">
+                <div class="stat-badge">Total Archive Logs: <span id="totalCountDisplay">0</span></div>
+            </div>
+            
+            <div style="max-height: 300px; overflow-y: auto; border: 1px solid #e1e4e8; border-radius: 4px;">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">Timestamp Logged</th>
+                            <th style="width: 30%;">Patient Registration Name</th>
+                            <th style="width: 45%;">Archived Clinical Medical Logs</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody">
+                        <!-- Dynamic data nodes load securely inside this viewport matrix -->
+                    </tbody>
+                </table>
+            </div>
+            <div style="text-align: right; margin-top: 15px;">
+                <button onclick="clearDatabase()" style="background-color:#c0392b; font-size:12px; padding:6px 12px; width: auto;">Purge Local Log Files</button>
+            </div>
+        </div>
+
+        <!-- CONSOLE RUNTIME DIAGNOSTIC FOOTER -->
+        <div class="app-footer">
+            <span>System Layout Architecture: Flow Layout Framework Connected</span>
+            <span>Environment Version Status: MediFlow HMS MVP Build v4.0 (CSS Flexflow)</span>
+        </div>
+
+    </div>
+
+    <!-- DIALOG COMPONENT PANEL OVERLAY -->
+    <div id="displayModal" class="modal">
+        <div class="modal-content" id="modalBorder">
+            <h2 style="text-align:center; margin-top:0;" id="modalHeader">System Notification</h2>
