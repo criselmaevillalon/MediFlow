@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>MediFlow HMS - CSS Flow Layout Framework</title>
     <style>
-        /* Base page layout container configurations */
+        /* Base configuration for Flow Layout */
         body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f6f9; color: #2c3e50; }
         .app-container { max-width: 1350px; margin: auto; }
         
@@ -13,8 +13,7 @@
         .app-header h1 { margin: 0; font-size: 22px; }
         .app-header .user-badge { background-color: #34495e; padding: 6px 12px; border-radius: 4px; font-size: 13px; font-weight: bold; border-left: 4px solid #3498db; }
 
-        /* THE SYSTEM FLOW SECTION ENGINE 
-           This handles the classic Flow Layout arrangement, letting cards line up and wrap naturally */
+        /* THE SYSTEM FLOW SECTION ENGINE (Flow Layout) */
         .flow-layout-container { 
             display: flex; 
             flex-wrap: wrap; 
@@ -23,58 +22,50 @@
             margin-bottom: 25px;
         }
 
-        /* FLEX FLOW COMPONENT CARD WRAPPERS 
-           Cards scale fluidly down to a minimum base size and naturally wrap based on screen boundaries */
+        /* FLEX FLOW COMPONENT CARD WRAPPERS */
         .flow-card { 
             background: #ffffff; 
             padding: 20px; 
             border-radius: 8px; 
             box-shadow: 0 4px 6px rgba(0,0,0,0.08); 
             border-top: 5px solid #3498db;
-            flex: 1 1 380px; /* Flex-grow, Flex-shrink, and base ideal width */
+            flex: 1 1 280px; /* Fluid resizing matrix */
             box-sizing: border-box;
         }
         .flow-card.patient-card { border-top-color: #27ae60; }
         .flow-card.billing-card { border-top-color: #e67e22; }
-        .flow-card h2 { font-size: 17px; margin-top: 0; margin-bottom: 15px; color: #2c3e50; }
+        
+        /* NEW FOLDER FILE TAB MODULE */
+        .flow-card.archive-file-tab { border-top-color: #9b59b6; background-color: #fcf8ff; cursor: pointer; text-align: center; transition: transform 0.2s, box-shadow 0.2s; }
+        .flow-card.archive-file-tab:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); background-color: #f7edff; }
+        .folder-icon { font-size: 50px; margin-bottom: 10px; display: block; }
+
+        .flow-card h2 { font-size: 16px; margin-top: 0; margin-bottom: 15px; color: #2c3e50; }
         
         /* Form Element Component Designs */
         label { display: block; margin: 10px 0 4px; font-weight: bold; font-size: 13px; color: #34495e; }
         input, select, textarea { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 13px; }
-        button { background-color: #27ae60; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 15px; font-weight: bold; transition: background 0.2s; }
+        button { background-color: #27ae60; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 14px; font-weight: bold; transition: background 0.2s; }
         button:hover { background-color: #219653; }
 
-        /* LARGE SYSTEM REGISTRY PANEL (Flows below input structures gracefully) */
-        .database-flow-panel { 
-            background: white; 
-            padding: 25px; 
-            border-radius: 8px; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.08);
-            width: 100%;
-            box-sizing: border-box;
-        }
-        .database-flow-panel h2 { margin-top: 0; color: #2c3e50; border-bottom: 2px solid #f1f2f6; padding-bottom: 10px; font-size: 18px; }
+        /* Modal View Setup for Large Data Viewports */
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); overflow-y: auto; }
+        .modal-content { background-color: white; margin: 8% auto; padding: 25px; border-radius: 8px; max-width: 700px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: left; }
+        .modal-content.small-popup { max-width: 380px; margin: 15% auto; }
+        .modal-item { display: flex; justify-content: space-between; margin: 10px 0; font-size: 14px; }
+        .modal-close-btn { width: 100%; padding: 10px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 15px; font-weight: bold; font-size: 14px; }
         
-        /* Interactive Filter Layout Bars */
-        .search-row { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; align-items: center; }
-        .search-box { flex: 1; min-width: 280px; padding: 10px; font-size: 14px; border: 2px solid #3498db; border-radius: 4px; outline: none; }
-        .stat-badge { background-color: #ecf0f1; padding: 10px 15px; border-radius: 4px; font-weight: bold; color: #2c3e50; font-size: 14px; white-space: nowrap; }
-
-        /* Data Matrix Output Structures */
-        .history-table { width: 100%; border-collapse: collapse; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .history-table th, .history-table td { border: 1px solid #e1e4e8; padding: 12px; font-size: 13px; text-align: left; }
+        /* Database Search and Table Styles */
+        .search-row { display: flex; gap: 15px; margin-bottom: 15px; align-items: center; }
+        .search-box { flex: 1; padding: 10px; font-size: 14px; border: 2px solid #9b59b6; border-radius: 4px; outline: none; }
+        .stat-badge { background-color: #ecf0f1; padding: 10px 15px; border-radius: 4px; font-weight: bold; color: #2c3e50; font-size: 14px; }
+        .history-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .history-table th, .history-table td { border: 1px solid #e1e4e8; padding: 10px; font-size: 13px; text-align: left; }
         .history-table th { background-color: #f1f2f6; color: #2c3e50; font-weight: bold; }
         .history-table tr:nth-child(even) { background-color: #f8f9fa; }
-        .history-table tr:hover { background-color: #f1f2f6; }
 
         /* FOOTER STATUS LAYER */
         .app-footer { background-color: #34495e; color: #bdc3c7; padding: 10px 20px; font-size: 12px; border-radius: 6px; margin-top: 25px; display: flex; justify-content: space-between; box-shadow: 0 -2px 4px rgba(0,0,0,0.05); }
-        
-        /* Modal Window Notification System Overlays */
-        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); }
-        .modal-content { background-color: white; margin: 12% auto; padding: 25px; border-radius: 8px; max-width: 380px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); text-align: left; }
-        .modal-item { display: flex; justify-content: space-between; margin: 10px 0; font-size: 14px; }
-        .modal-close-btn { width: 100%; padding: 8px; background-color: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 15px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -141,44 +132,48 @@
                 </form>
             </div>
 
-        </div>
+            <!-- 🗂️ NEW CLICKABLE FILE / FOLDER TAB MODULE -->
+            <div class="flow-card archive-file-tab" onclick="openArchiveDatabase()">
+                <span class="folder-icon">📁</span>
+                <h2 style="color:#9b59b6; margin-bottom:5px;">Archived Patient Database</h2>
+                <p style="margin:0; font-size:12px; color:#7f8c8d;">Click to open and view previous patient log files</p>
+                <div style="margin-top:15px; font-weight:bold; font-size:13px; color:#9b59b6;">Total Files: <span id="tabCountDisplay">0</span></div>
+            </div>
 
-        <!-- STRETCHED LOGGING LEDGER REGISTRY CONTAINER -->
-        <div class="database-flow-panel">
-            <h2>🗂️ Archived Patient Records Log Database Registry</h2>
-            <div class="search-row">
-                <input type="text" id="recordSearch" class="search-box" onkeyup="searchRecords()" placeholder="🔍 Type a patient's name to filter database logs in real-time...">
-                <div class="stat-badge">Total Archive Logs: <span id="totalCountDisplay">0</span></div>
-            </div>
-            
-            <div style="max-height: 300px; overflow-y: auto; border: 1px solid #e1e4e8; border-radius: 4px;">
-                <table class="history-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 25%;">Timestamp Logged</th>
-                            <th style="width: 30%;">Patient Registration Name</th>
-                            <th style="width: 45%;">Archived Clinical Medical Logs</th>
-                        </tr>
-                    </thead>
-                    <tbody id="historyTableBody">
-                        <!-- Dynamic data nodes load securely inside this viewport matrix -->
-                    </tbody>
-                </table>
-            </div>
-            <div style="text-align: right; margin-top: 15px;">
-                <button onclick="clearDatabase()" style="background-color:#c0392b; font-size:12px; padding:6px 12px; width: auto;">Purge Local Log Files</button>
-            </div>
         </div>
 
         <!-- CONSOLE RUNTIME DIAGNOSTIC FOOTER -->
         <div class="app-footer">
             <span>System Layout Architecture: Flow Layout Framework Connected</span>
-            <span>Environment Version Status: MediFlow HMS MVP Build v4.0 (CSS Flexflow)</span>
+            <span>Environment Version Status: MediFlow HMS MVP Build v5.0 (File Tab Engine)</span>
         </div>
 
     </div>
 
-    <!-- DIALOG COMPONENT PANEL OVERLAY -->
-    <div id="displayModal" class="modal">
-        <div class="modal-content" id="modalBorder">
-            <h2 style="text-align:center; margin-top:0;" id="modalHeader">System Notification</h2>
+    <!-- 🗂️ THE SEPARATE LARGE POPUP FOR VIEWING PREVIOUS PATIENTS -->
+    <div id="databaseModal" class="modal">
+        <div class="modal-content" style="border-top: 10px solid #9b59b6;">
+            <h2 style="color:#9b59b6; margin-top:0;">📁 Patient History Registry Database</h2>
+            <p style="font-size:12px; color:#7f8c8d; margin-top:-10px;">MediFlow Secure Archive File Directory</p>
+            <hr style="border: 0; border-top: 1px solid #eee;">
+            
+            <div class="search-row">
+                <input type="text" id="recordSearch" class="search-box" onkeyup="searchRecords()" placeholder="🔍 Type a patient's name to lookup files...">
+                <div class="stat-badge">Total: <span id="modalCountDisplay">0</span></div>
+            </div>
+            
+            <div style="max-height: 350px; overflow-y: auto; border: 1px solid #e1e4e8; border-radius: 4px;">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">Timestamp Logged</th>
+                            <th style="width: 30%;">Patient Registration Name</th>
+                            <th style="width: 45%;">Clinical Medical Logs</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTableBody">
+                        <!-- Database rows render here -->
+                    </tbody>
+                </table>
+            </div>
+            
