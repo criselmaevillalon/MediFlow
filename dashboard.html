@@ -48,6 +48,19 @@
         button { background-color: #27ae60; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 14px; font-weight: bold; transition: background 0.2s; }
         button:hover { background-color: #219653; }
 
+        /* VISUAL LEDGER GRAND TOTAL DISPLAY PANEL */
+        .total-display-box {
+            background-color: #fdf2e9;
+            border: 2px dashed #e67e22;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #d35400;
+            margin-top: 15px;
+        }
+
         /* FOOTER STATUS LAYER */
         .app-footer { background-color: #34495e; color: #bdc3c7; padding: 10px 20px; font-size: 12px; border-radius: 6px; margin-top: 25px; display: flex; justify-content: space-between; box-shadow: 0 -2px 4px rgba(0,0,0,0.05); }
     </style>
@@ -59,7 +72,7 @@
         <!-- SYSTEM NAVIGATION HEADER OVERVIEW -->
         <div class="app-header">
             <h1>MediFlow Hospital Management System (HMS)</h1>
-            <div class="user-badge"> Flora, Apayao Branch Terminal</div>
+            <div class="user-badge">🔒 Flora, Apayao Branch Terminal</div>
         </div>
 
         <!-- [PRIMARY FLOW LAYOUT WORKSPACE ENVELOPE] -->
@@ -75,7 +88,7 @@
                     <label>Medical History / Diagnostics:</label>
                     <textarea id="pHistory" rows="4" required placeholder="Enter medical history logs..."></textarea>
                     
-                    <button type="submit" id="btnSave">Save File Entry</button>
+                    <button type="submit">Save File Entry</button>
                 </form>
             </div>
 
@@ -92,7 +105,7 @@
                     <label>Allocation Date & Time:</label>
                     <input type="datetime-local" id="schedTime" required>
 
-                    <button type="submit" id="btnLock" style="background-color: #3498db;">Lock Allocation Schedule</button>
+                    <button type="submit" style="background-color: #3498db;">Lock Allocation Schedule</button>
                 </form>
             </div>
 
@@ -112,13 +125,18 @@
                     <label>Accommodation Room Charges (₱):</label>
                     <input type="number" id="feeRoom" value="0" min="0" required>
 
-                    <button type="submit" id="btnCalc" style="background-color: #e67e22;">Calculate Total Billing</button>
+                    <button type="submit" style="background-color: #e67e22;">Calculate Grand Total Invoice</button>
                 </form>
+                
+                <!-- CHANGED DISPLAY TEXT readout label BELOW -->
+                <div class="total-display-box">
+                    Calculate Total Billing: ₱<span id="Calculate Total Billing">0.00</span>
+                </div>
             </div>
 
-            
+            <!-- 🗂️ CLICKABLE FILE / FOLDER TAB MODULE -->
             <div class="flow-card archive-file-tab" id="archiveFolderCard">
-                <span class="folder-icon"></span>
+                <span class="folder-icon">📁</span>
                 <h2 style="color:#9b59b6; margin-bottom:5px;">Archived Patient Database</h2>
                 <p style="margin:0; font-size:12px; color:#7f8c8d;">Click to open and view previous patient log files</p>
                 <div style="margin-top:15px; font-weight:bold; font-size:13px; color:#9b59b6;">Total Files: <span id="tabCountDisplay">0</span></div>
@@ -129,17 +147,14 @@
         <!-- CONSOLE RUNTIME DIAGNOSTIC FOOTER -->
         <div class="app-footer">
             <div>System Layout Architecture: Flow Layout Framework Connected</div>
-            <div>Environment Version Status: MediFlow HMS MVP Build v6.0 (Fail-Safe Script Engine)</div>
+            <div>Environment Version Status: MediFlow HMS MVP Build v6.5 (Billing Screen Pipeline Activated)</div>
         </div>
 
     </div>
 
     <!-- ==================== JAVA SCRIPT CORE ENGINE ==================== -->
     <script>
-        // Mas ligtas na pag-load ng database gamit ang Event Listeners kapag ready na ang buong page
         document.addEventListener("DOMContentLoaded", function() {
-            
-            // Subukang kumuha ng data sa archive, kung wala, gumawa ng blangko
             let patientArchive = [];
             try {
                 patientArchive = JSON.parse(localStorage.getItem('mediflowArchive')) || [];
@@ -147,7 +162,6 @@
                 patientArchive = [];
             }
 
-            // Function para i-update ang counter sa screen
             function updateArchiveCount() {
                 const countDisplay = document.getElementById('tabCountDisplay');
                 if (countDisplay) {
@@ -156,12 +170,11 @@
             }
             updateArchiveCount();
 
-            // CARD 1 EVENT: Pindutan para mag-save at kusa mag-archive
+            // CARD 1: Save Patient
             const form1 = document.getElementById('formCard1');
             if (form1) {
                 form1.addEventListener('submit', function(event) {
-                    event.preventDefault(); // Pinipigilan nito ang pag-refresh o pagtalon ng page
-                    
+                    event.preventDefault();
                     const name = document.getElementById('pName').value.trim();
                     const history = document.getElementById('pHistory').value.trim();
 
@@ -178,17 +191,16 @@
                     localStorage.setItem('mediflowArchive', JSON.stringify(patientArchive));
                     updateArchiveCount();
 
-                    alert(Record Created Successfully!\n\nPatient "${name}" has been added to the Archived Database.);
+                    alert(✅ Record Created Successfully!\n\nPatient "${name}" has been added to the database archive.);
                     form1.reset();
                 });
             }
 
-            // CARD 2 EVENT: Pindutan para sa schedule assignment logs
+            // CARD 2: Scheduler
             const form2 = document.getElementById('formCard2');
             if (form2) {
                 form2.addEventListener('submit', function(event) {
                     event.preventDefault();
-                    
                     const doctor = document.getElementById('docName').value.trim();
                     const room = document.getElementById('roomNum').value.trim();
                     const time = document.getElementById('schedTime').value;
@@ -198,6 +210,4 @@
                         patientArchive[lastIndex].doctor = doctor;
                         patientArchive[lastIndex].room = room;
                         patientArchive[lastIndex].time = time;
-                        localStorage.setItem('mediflowArchive', JSON.stringify(patientArchive));
-                    }
 
