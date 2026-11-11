@@ -1,4 +1,4 @@
- <!-- CONSOLE RUNTIME DIAGNOSTIC FOOTER -->
+<!-- CONSOLE RUNTIME DIAGNOSTIC FOOTER -->
         <div class="app-footer">
             <div>System Layout Architecture: Flow Layout Framework Connected</div>
             <div>Environment Version Status: MediFlow HMS MVP Build v6.0 (File Tab Engine)</div>
@@ -122,3 +122,215 @@
     </script>
 </body>
 </html>
+Crisel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MediFlow HMS - CSS Flow Layout Framework</title>
+    <style>
+        /* Base configuration for Flow Layout */
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f6f9; color: #2c3e50; }
+        .app-container { max-width: 1350px; margin: auto; }
+        
+        /* HEADER ZONE */
+        .app-header { background-color: #2c3e50; color: white; padding: 15px 20px; border-radius: 6px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .app-header h1 { margin: 0; font-size: 22px; }
+        .app-header .user-badge { background-color: #34495e; padding: 6px 12px; border-radius: 4px; font-size: 13px; font-weight: bold; border-left: 4px solid #3498db; }
+
+        /* THE SYSTEM FLOW SECTION ENGINE (Flow Layout) */
+        .flow-layout-container { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 20px; 
+            justify-content: flex-start;
+            margin-bottom: 25px;
+        }
+
+        /* FLEX FLOW COMPONENT CARD WRAPPERS */
+        .flow-card { 
+            background: #ffffff; 
+            padding: 20px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.08); 
+            border-top: 5px solid #3498db;
+            flex: 1 1 280px;
+            box-sizing: border-box;
+        }
+        .flow-card.patient-card { border-top-color: #27ae60; }
+        .flow-card.billing-card { border-top-color: #e67e22; }
+        
+        /* NEW FOLDER FILE TAB MODULE */
+        .flow-card.archive-file-tab { border-top-color: #9b59b6; background-color: #fcf8ff; cursor: pointer; text-align: center; transition: transform 0.2s, box-shadow 0.2s; }
+        .flow-card.archive-file-tab:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); background-color: #f7edff; }
+        .folder-icon { font-size: 50px; margin-bottom: 10px; display: block; }
+
+        .flow-card h2 { font-size: 16px; margin-top: 0; margin-bottom: 15px; color: #2c3e50; }
+        
+        /* Form Element Component Designs */
+        label { display: block; margin: 10px 0 4px; font-weight: bold; font-size: 13px; color: #34495e; }
+        input, select, textarea { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 13px; }
+        button { background-color: #27ae60; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 14px; font-weight: bold; transition: background 0.2s; }
+        button:hover { background-color: #219653; }
+
+        /* FOOTER STATUS LAYER */
+        .app-footer { background-color: #34495e; color: #bdc3c7; padding: 10px 20px; font-size: 12px; border-radius: 6px; margin-top: 25px; display: flex; justify-content: space-between; box-shadow: 0 -2px 4px rgba(0,0,0,0.05); }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- SYSTEM NAVIGATION HEADER OVERVIEW -->
+        <div class="app-header">
+            <h1>MediFlow Hospital Management System (HMS)</h1>
+            <div class="user-badge">🔒 Flora, Apayao Branch Terminal</div>
+        </div>
+
+        <!-- [PRIMARY FLOW LAYOUT WORKSPACE ENVELOPE] -->
+        <div class="flow-layout-container">
+            
+            <!-- FLOW ITEM CARD 1: ADMISSIONS PROFILE -->
+            <div class="flow-card patient-card">
+                <h2>1. Patient Admissions Record</h2>
+                <form onsubmit="savePatient(event)">
+                    <label>Patient Full Name:</label>
+                    <input type="text" id="pName" required placeholder="e.g., Juan Dela Cruz">
+                    
+                    <label>Medical History / Diagnostics / Allergies:</label>
+                    <textarea id="pHistory" rows="4" required placeholder="Enter medical history logs..."></textarea>
+                    
+                    <button type="submit">Save File Entry</button>
+                </form>
+            </div>
+
+            <!-- FLOW ITEM CARD 2: SCHEDULING DISPATCH -->
+            <div class="flow-card">
+                <h2>2. Room & Doctor Appointment Scheduler</h2>
+                <form onsubmit="confirmSchedule(event)">
+                    <label>Assign Attending Practitioner:</label>
+                    <input type="text" id="docName" required placeholder="Type doctor name...">
+
+                    <label>Designated Hospital Ward / Room:</label>
+                    <input type="text" id="roomNum" required placeholder="Type bed, ward, or room code...">
+
+                    <label>Allocation Date & Time:</label>
+                    <input type="datetime-local" id="schedTime" required>
+
+                    <button type="submit" style="background-color: #3498db;">Lock Allocation Schedule</button>
+                </form>
+            </div>
+
+            <!-- FLOW ITEM CARD 3: ACCOUNTING CALCULATOR -->
+            <div class="flow-card billing-card">
+                <h2>3. Automated Financial Billing Module</h2>
+                <form onsubmit="calculateBilling(event)">
+                    <label>Consultation Fee (₱):</label>
+                    <input type="number" id="feeConsult" value="0" min="0" required>
+
+                    <label>Laboratory Screening Fees (₱):</label>
+                    <input type="number" id="feeLab" value="0" min="0" required>
+
+                    <label>Pharmacy Medicine Costs (₱):</label>
+                    <input type="number" id="feeMed" value="0" min="0" required>
+
+                    <label>Accommodation Room Charges (₱):</label>
+                    <input type="number" id="feeRoom" value="0" min="0" required>
+
+                    <button type="submit" style="background-color: #e67e22;">Calculate Grand Total Invoice</button>
+                </form>
+            </div>
+
+            <!-- 🗂️ CLICKABLE FILE / FOLDER TAB MODULE -->
+            <div class="flow-card archive-file-tab" onclick="openArchiveDatabase()">
+                <span class="folder-icon">📁</span>
+                <h2 style="color:#9b59b6; margin-bottom:5px;">Archived Patient Database</h2>
+                <p style="margin:0; font-size:12px; color:#7f8c8d;">Click to open and view previous patient log files</p>
+                <div style="margin-top:15px; font-weight:bold; font-size:13px; color:#9b59b6;">Total Files: <span id="tabCountDisplay">0</span></div>
+            </div>
+
+        </div>
+
+        <!-- CONSOLE RUNTIME DIAGNOSTIC FOOTER -->
+        <div class="app-footer">
+            <div>System Layout Architecture: Flow Layout Framework Connected</div>
+            <div>Environment Version Status: MediFlow HMS MVP Build v6.0 (File Tab Engine)</div>
+        </div>
+
+    </div>
+
+    <!-- ==================== JAVA SCRIPT CORE ENGINE ==================== -->
+    <script>
+        let currentRecord = {
+            name: '',
+            history: '',
+            doctor: 'Not Assigned',
+            room: 'Not Assigned',
+            time: 'Not Assigned',
+            billing: 0
+        };
+
+        let patientArchive = JSON.parse(localStorage.getItem('mediflowArchive')) || [];
+
+        function updateArchiveCount() {
+            document.getElementById('tabCountDisplay').innerText = patientArchive.length;
+        }
+        updateArchiveCount();
+
+        function savePatient(event) {
+            event.preventDefault();
+            const nameInput = document.getElementById('pName').value.trim();
+            const historyInput = document.getElementById('pHistory').value.trim();
+
+            if (!nameInput || !historyInput) {
+                alert("⚠️ Process Incomplete: Please complete the Patient Admissions Record before saving.");
+                return;
+            }
+
+            currentRecord.name = nameInput;
+            currentRecord.history = historyInput;
+
+            patientArchive.push({ ...currentRecord });
+            localStorage.setItem('mediflowArchive', JSON.stringify(patientArchive));
+            updateArchiveCount();
+
+            alert(✅ Success: Record for "${nameInput}" has been automatically archived!);
+            event.target.reset();
+        }
+
+        function confirmSchedule(event) {
+            event.preventDefault();
+            if (patientArchive.length === 0) {
+                alert("⚠️ Operation Rejected: Initialize an active Patient Admissions Record in Card 1 first.");
+                return;
+            }
+
+            let lastIndex = patientArchive.length - 1;
+            patientArchive[lastIndex].doctor = document.getElementById('docName').value;
+            patientArchive[lastIndex].room = document.getElementById('roomNum').value;
+            patientArchive[lastIndex].time = document.getElementById('schedTime').value;
+
+            localStorage.setItem('mediflowArchive', JSON.stringify(patientArchive));
+            alert🔒 Schedule Allocation Locked successfully for ${patientArchive[lastIndex].name}!`);
+            event.target.reset();
+        }
+
+        function calculateBilling(event) {
+            event.preventDefault();
+            if (patientArchive.length === 0) {
+                alert("⚠️ Operation Rejected: Initialize an active Patient Admissions Record in Card 1 first.");
+                return;
+            }
+
+            const consult = parseFloat(document.getElementById('feeConsult').value) || 0;
+            const lab = parseFloat(document.getElementById('feeLab').value) || 0;
+            const med = parseFloat(document.getElementById('feeMed').value) || 0;
+            const room = parseFloat(document.getElementById('feeRoom').value) || 0;
+
+            const grandTotal = consult + lab + med + room;
+            let lastIndex = patientArchive.length - 1;
+            patientArchive[lastIndex].billing = grandTotal;
+
+            localStorage.setItem('mediflowArchive', JSON.stringify(patientArchive));
+Compose
+Write to Crisel Villalon
