@@ -117,7 +117,7 @@
             </div>
 
             <!-- 🗂️ CLICKABLE FILE / FOLDER TAB MODULE -->
-            <div class="flow-card archive-file-tab" onclick="openArchiveDatabase()">
+            <div class="flow-card archive-file-tab" onclick="openArchiveDatabase(event)">
                 <span class="folder-icon">📁</span>
                 <h2 style="color:#9b59b6; margin-bottom:5px;">Archived Patient Database</h2>
                 <p style="margin:0; font-size:12px; color:#7f8c8d;">Click to open and view previous patient log files</p>
@@ -136,24 +136,22 @@
 
     <!-- ==================== JAVA SCRIPT CORE ENGINE ==================== -->
     <script>
-        let currentRecord = {
-            name: '',
-            history: '',
-            doctor: 'Not Assigned',
-            room: 'Not Assigned',
-            time: 'Not Assigned',
-            billing: 0
-        };
-
+        // Array to store patient objects
         let patientArchive = JSON.parse(localStorage.getItem('mediflowArchive')) || [];
 
+        // Synchronize display counter on page load
         function updateArchiveCount() {
-            document.getElementById('tabCountDisplay').innerText = patientArchive.length;
+            const displayEl = document.getElementById('tabCountDisplay');
+            if (displayEl) {
+                displayEl.innerText = patientArchive.length;
+            }
         }
         updateArchiveCount();
 
+        // CARD 1: Save Patient & Auto-Archive
         function savePatient(event) {
-            event.preventDefault();
+            event.preventDefault(); // STOPS PAGE JUMPING
+            
             const nameInput = document.getElementById('pName').value.trim();
             const historyInput = document.getElementById('pHistory').value.trim();
 
@@ -162,19 +160,29 @@
                 return;
             }
 
-            currentRecord.name = nameInput;
-            currentRecord.history = historyInput;
+            // Create new individual item entry structure
+            let newRecord = {
+                name: nameInput,
+                history: historyInput,
+                doctor: 'Not Assigned',
+                room: 'Not Assigned',
+                time: 'Not Assigned',
+                billing: 0
+            };
 
-            patientArchive.push({ ...currentRecord });
+            // Push to local storage database
+            patientArchive.push(newRecord);
             localStorage.setItem('mediflowArchive', JSON.stringify(patientArchive));
+            
             updateArchiveCount();
-
-            alert(✅ Success: Record for "${nameInput}" has been automatically archived!);
+            alert(✅ Success: Record for "${nameInput}" has been automatically saved to the Archive!);
             event.target.reset();
         }
 
+        // CARD 2: Lock Schedule Allocation
         function confirmSchedule(event) {
-            event.preventDefault();
+            event.preventDefault(); // STOPS PAGE JUMPING
+            
             if (patientArchive.length === 0) {
                 alert("⚠️ Operation Rejected: Initialize an active Patient Admissions Record in Card 1 first.");
                 return;
@@ -190,22 +198,13 @@
             event.target.reset();
         }
 
+        // CARD 3: Calculate Total Bills
         function calculateBilling(event) {
-            event.preventDefault();
+            event.preventDefault(); // STOPS PAGE JUMPING
+            
             if (patientArchive.length === 0) {
                 alert("⚠️ Operation Rejected: Initialize an active Patient Admissions Record in Card 1 first.");
                 return;
             }
 
             const consult = parseFloat(document.getElementById('feeConsult').value) || 0;
-            const lab = parseFloat(document.getElementById('feeLab').value) || 0;
-            const med = parseFloat(document.getElementById('feeMed').value) || 0;
-            const room = parseFloat(document.getElementById('feeRoom').value) || 0;
-
-            const grandTotal = consult + lab + med + room;
-            let lastIndex = patientArchive.length - 1;
-            patientArchive[lastIndex].billing = grandTotal;
-
-            localStorage.setItem('mediflowArchive', JSON.stringify(patientArchive));
-Compose
-Write to Crisel Villalon
