@@ -4,16 +4,16 @@
     <meta charset="UTF-8">
     <title>MediFlow HMS - CSS Flow Layout Framework</title>
     <style>
-        
+        /* Base configuration for Flow Layout */
         body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f6f9; color: #2c3e50; }
         .app-container { max-width: 1350px; margin: auto; }
         
-    
+        /* HEADER ZONE */
         .app-header { background-color: #2c3e50; color: white; padding: 15px 20px; border-radius: 6px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
         .app-header h1 { margin: 0; font-size: 22px; }
         .app-header .user-badge { background-color: #34495e; padding: 6px 12px; border-radius: 4px; font-size: 13px; font-weight: bold; border-left: 4px solid #3498db; }
 
-       
+        /* THE SYSTEM FLOW SECTION ENGINE (Flow Layout) */
         .flow-layout-container { 
             display: flex; 
             flex-wrap: wrap; 
@@ -22,7 +22,7 @@
             margin-bottom: 25px;
         }
 
-       
+        /* FLEX FLOW COMPONENT CARD WRAPPERS */
         .flow-card { 
             background: #ffffff; 
             padding: 20px; 
@@ -35,19 +35,20 @@
         .flow-card.patient-card { border-top-color: #27ae60; }
         .flow-card.billing-card { border-top-color: #e67e22; }
         
+        /* NEW FOLDER FILE TAB MODULE */
         .flow-card.archive-file-tab { border-top-color: #9b59b6; background-color: #fcf8ff; cursor: pointer; text-align: center; transition: transform 0.2s, box-shadow 0.2s; }
         .flow-card.archive-file-tab:hover { transform: translateY(-5px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); background-color: #f7edff; }
         .folder-icon { font-size: 50px; margin-bottom: 10px; display: block; }
 
         .flow-card h2 { font-size: 16px; margin-top: 0; margin-bottom: 15px; color: #2c3e50; }
         
-       
+        /* Form Element Component Designs */
         label { display: block; margin: 10px 0 4px; font-weight: bold; font-size: 13px; color: #34495e; }
         input, select, textarea { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 13px; }
         button { background-color: #27ae60; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; width: 100%; font-size: 14px; font-weight: bold; transition: background 0.2s; }
         button:hover { background-color: #219653; }
 
-        
+        /* FOOTER STATUS LAYER */
         .app-footer { background-color: #34495e; color: #bdc3c7; padding: 10px 20px; font-size: 12px; border-radius: 6px; margin-top: 25px; display: flex; justify-content: space-between; box-shadow: 0 -2px 4px rgba(0,0,0,0.05); }
     </style>
 </head>
@@ -55,33 +56,33 @@
 
     <div class="app-container">
         
-     
+        <!-- SYSTEM NAVIGATION HEADER OVERVIEW -->
         <div class="app-header">
             <h1>MediFlow Hospital Management System (HMS)</h1>
             <div class="user-badge"> Flora, Apayao Branch Terminal</div>
         </div>
 
-        
+        <!-- [PRIMARY FLOW LAYOUT WORKSPACE ENVELOPE] -->
         <div class="flow-layout-container">
             
-           
+            <!-- FLOW ITEM CARD 1: ADMISSIONS PROFILE -->
             <div class="flow-card patient-card">
                 <h2>1. Patient Admissions Record</h2>
-                <form onsubmit="savePatient(event)">
+                <form id="formCard1">
                     <label>Patient Full Name:</label>
                     <input type="text" id="pName" required placeholder="e.g., Juan Dela Cruz">
                     
                     <label>Medical History / Diagnostics:</label>
                     <textarea id="pHistory" rows="4" required placeholder="Enter medical history logs..."></textarea>
                     
-                    <button type="submit">Save File Entry</button>
+                    <button type="submit" id="btnSave">Save File Entry</button>
                 </form>
             </div>
 
-            
+            <!-- FLOW ITEM CARD 2: SCHEDULING DISPATCH -->
             <div class="flow-card">
                 <h2>2. Room & Doctor Appointment Scheduler</h2>
-                <form onsubmit="confirmSchedule(event)">
+                <form id="formCard2">
                     <label>Assign Attending Practitioner:</label>
                     <input type="text" id="docName" required placeholder="Type doctor name...">
 
@@ -91,14 +92,14 @@
                     <label>Allocation Date & Time:</label>
                     <input type="datetime-local" id="schedTime" required>
 
-                    <button type="submit" style="background-color: #3498db;">Lock Allocation Schedule</button>
+                    <button type="submit" id="btnLock" style="background-color: #3498db;">Lock Allocation Schedule</button>
                 </form>
             </div>
 
-           
+            <!-- FLOW ITEM CARD 3: ACCOUNTING CALCULATOR -->
             <div class="flow-card billing-card">
                 <h2>3. Automated Financial Billing Module</h2>
-                <form onsubmit="calculateBilling(event)">
+                <form id="formCard3">
                     <label>Consultation Fee (₱):</label>
                     <input type="number" id="feeConsult" value="0" min="0" required>
 
@@ -111,12 +112,12 @@
                     <label>Accommodation Room Charges (₱):</label>
                     <input type="number" id="feeRoom" value="0" min="0" required>
 
-                    <button type="submit" style="background-color: #e67e22;">Calculate Grand Total Invoice</button>
+                    <button type="submit" id="btnCalc" style="background-color: #e67e22;">Calculate Total Billing</button>
                 </form>
             </div>
 
-           
-            <div class="flow-card archive-file-tab" onclick="openArchiveDatabase(event)">
+            
+            <div class="flow-card archive-file-tab" id="archiveFolderCard">
                 <span class="folder-icon"></span>
                 <h2 style="color:#9b59b6; margin-bottom:5px;">Archived Patient Database</h2>
                 <p style="margin:0; font-size:12px; color:#7f8c8d;">Click to open and view previous patient log files</p>
@@ -125,87 +126,78 @@
 
         </div>
 
-        
+        <!-- CONSOLE RUNTIME DIAGNOSTIC FOOTER -->
         <div class="app-footer">
             <div>System Layout Architecture: Flow Layout Framework Connected</div>
-            <div>Environment Version Status: MediFlow HMS MVP Build v6.0 (File Tab Engine)</div>
+            <div>Environment Version Status: MediFlow HMS MVP Build v6.0 (Fail-Safe Script Engine)</div>
         </div>
 
     </div>
 
-    
+    <!-- ==================== JAVA SCRIPT CORE ENGINE ==================== -->
     <script>
-       
-        let patientArchive = JSON.parse(localStorage.getItem('mediflowArchive')) || [];
-
-      
-        function updateArchiveCount() {
-            const countDisplay = document.getElementById('tabCountDisplay');
-            if (countDisplay) {
-                countDisplay.innerText = patientArchive.length;
-            }
-        }
-        updateArchiveCount();
-
-        
-        function savePatient(event) {
-            event.preventDefault();
+        // Mas ligtas na pag-load ng database gamit ang Event Listeners kapag ready na ang buong page
+        document.addEventListener("DOMContentLoaded", function() {
             
-            const name = document.getElementById('pName').value.trim();
-            const history = document.getElementById('pHistory').value.trim();
+            // Subukang kumuha ng data sa archive, kung wala, gumawa ng blangko
+            let patientArchive = [];
+            try {
+                patientArchive = JSON.parse(localStorage.getItem('mediflowArchive')) || [];
+            } catch (e) {
+                patientArchive = [];
+            }
 
-            const newRecord = {
-                name: name,
-                history: history,
-                doctor: 'Not Assigned',
-                room: 'Not Assigned',
-                time: 'Not Assigned',
-                billing: 0
-            };
-
-            patientArchive.push(newRecord);
-            localStorage.setItem('mediflowArchive', JSON.stringify(patientArchive));
+            // Function para i-update ang counter sa screen
+            function updateArchiveCount() {
+                const countDisplay = document.getElementById('tabCountDisplay');
+                if (countDisplay) {
+                    countDisplay.innerText = patientArchive.length;
+                }
+            }
             updateArchiveCount();
 
-            alert(✅ Record Created:\nPatient "${name}" has been successfully added to the database.);
-            event.target.reset();
-        }
+            // CARD 1 EVENT: Pindutan para mag-save at kusa mag-archive
+            const form1 = document.getElementById('formCard1');
+            if (form1) {
+                form1.addEventListener('submit', function(event) {
+                    event.preventDefault(); // Pinipigilan nito ang pag-refresh o pagtalon ng page
+                    
+                    const name = document.getElementById('pName').value.trim();
+                    const history = document.getElementById('pHistory').value.trim();
 
-      
-        function confirmSchedule(event) {
-            event.preventDefault();
-            
-            const doctor = document.getElementById('docName').value.trim();
-            const room = document.getElementById('roomNum').value.trim();
-            const time = document.getElementById('schedTime').value;
+                    const newRecord = {
+                        name: name,
+                        history: history,
+                        doctor: 'Not Assigned',
+                        room: 'Not Assigned',
+                        time: 'Not Assigned',
+                        billing: 0
+                    };
 
-            if (patientArchive.length > 0) {
-                let lastIndex = patientArchive.length - 1;
-                patientArchive[lastIndex].doctor = doctor;
-                patientArchive[lastIndex].room = room;
-                patientArchive[lastIndex].time = time;
-                localStorage.setItem('mediflowArchive', JSON.stringify(patientArchive));
+                    patientArchive.push(newRecord);
+                    localStorage.setItem('mediflowArchive', JSON.stringify(patientArchive));
+                    updateArchiveCount();
+
+                    alert(Record Created Successfully!\n\nPatient "${name}" has been added to the Archived Database.);
+                    form1.reset();
+                });
             }
 
-            alert Schedule Locked:\nPractitioner: ${doctor}\nRoom/Ward: ${room}\nSchedule: ${time}`);
-            event.target.reset();
-        }
+            // CARD 2 EVENT: Pindutan para sa schedule assignment logs
+            const form2 = document.getElementById('formCard2');
+            if (form2) {
+                form2.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    
+                    const doctor = document.getElementById('docName').value.trim();
+                    const room = document.getElementById('roomNum').value.trim();
+                    const time = document.getElementById('schedTime').value;
 
-      
-        function calculateBilling(event) {
-            event.preventDefault();
-            
-            const consult = parseFloat(document.getElementById('feeConsult').value) || 0;
-            const lab = parseFloat(document.getElementById('feeLab').value) || 0;
-            const med = parseFloat(document.getElementById('feeMed').value) || 0;
-            const room = parseFloat(document.getElementById('feeRoom').value) || 0;
-
-            const total = consult + lab + med + room;
-
-            if (patientArchive.length > 0) {
-                let lastIndex = patientArchive.length - 1;
-                patientArchive[lastIndex].billing = total;
-                localStorage.setItem('mediflowArchive', JSON.stringify(patientArchive));
-            }
-
+                    if (patientArchive.length > 0) {
+                        let lastIndex = patientArchive.length - 1;
+                        patientArchive[lastIndex].doctor = doctor;
+                        patientArchive[lastIndex].room = room;
+                        patientArchive[lastIndex].time = time;
+                        localStorage.setItem('mediflowArchive', JSON.stringify(patientArchive));
+                    }
 
